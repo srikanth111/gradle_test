@@ -1,0 +1,44 @@
+task onlySpecifiesCodeForConfigurationPhase {
+	group 'vogella'
+	description 'configuration phase task example'
+	
+	println 'I always get printed even though, I am not invoked'
+}
+
+task anotherUnrelatedTask {
+	doLast {
+		println 'I am in the doLast execution phase'
+	}
+}
+
+/*in this example, the configuration phase is executed for every available task which is specified in build.gradle file.
+even we can create a default tasks where if no other tasks are available, then default tasks are executed in the bulid.gradle file*/
+
+defaultTasks 'clean', 'compile'
+
+task clean{
+	doLast{
+		println 'Executing the clean task'
+	}
+}
+
+task compile {
+ 	doLast{
+		println 'Executing the compile task'
+	}
+}
+
+task other(dependsOn: 'compile') {
+	doLast{
+		println "I am not a default task!"
+	}
+}
+
+task cleanOther {
+	doLast {
+		println "I want to clean up before running"
+	}
+}
+
+cleanOther.dependsOn clean,compile,other
+
